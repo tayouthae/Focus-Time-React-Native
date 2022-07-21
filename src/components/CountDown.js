@@ -7,7 +7,12 @@ const minutesToMilis = (min) => min * 1000 * 60;
 
 const formatTime = (time) => (time < 10 ? `0${time}` : time);
 
-export const CountDown = ({ minutes = 1, isPaused, style = {} }) => {
+export const CountDown = ({
+  minutes = 1,
+  isPaused,
+  onProgress,
+  style = {},
+}) => {
   const interval = React.useRef(null);
 
   const countdown = () => {
@@ -16,13 +21,19 @@ export const CountDown = ({ minutes = 1, isPaused, style = {} }) => {
         return time;
       }
       const timeLeft = time - 1000;
+
+      onProgress(timeLeft / minutesToMilis(minutes));
       return timeLeft;
     });
   };
 
   useEffect(() => {
+    if (isPaused) {
+      if (interval.current) clearInterval(interval.current);
+      return;
+    }
     interval.current = setInterval(countdown, 1000);
-  }, []);
+  }, [isPaused]);
 
   const [millis, setMillis] = useState(minutesToMilis(minutes));
 
