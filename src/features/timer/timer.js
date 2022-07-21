@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Vibration, Platform } from "react-native";
 import { colors } from "../../utils/colors";
 import { spacing } from "../../utils/sizes";
 import { CountDown } from "../../components/CountDown";
@@ -8,9 +8,11 @@ import { ProgressBar } from "react-native-paper";
 import { Timing } from "./Timing";
 import { useKeepAwake } from "expo-keep-awake";
 
-export const Timer = ({ subject, textStyles = {} }) => {
+const DEFAULT_TIME = 0.1;
+
+export const Timer = ({ subject, onTimerEnd, textStyles = {} }) => {
   useKeepAwake();
-  const [minutes, setMinutes] = useState(0.1);
+  const [minutes, setMinutes] = useState(DEFAULT_TIME);
   const [isStarted, setIsStarted] = useState(false);
   const [progress, setProgress] = useState(1);
 
@@ -24,12 +26,30 @@ export const Timer = ({ subject, textStyles = {} }) => {
     setIsStarted(false);
   };
 
+  const vibrate = () => {
+    if (Platform.OS === "ios") {
+      const interval = setInterval(() => Vibration.vibrate(), 1000);
+      setTimeout(() => clearInterval(interval), 1000);
+    } else {
+      Vibration.vibrate(10000);
+    }
+  };
+
+  const onEnd = () => {
+    vibrate();
+    setMinutes(DEFAULT_TIME);
+    setProgress(1);
+    setIsStarted(false);
+    onTimerEnd();
+  };
+
   return (
     <View style={styles.container}>
       <CountDown
         style={styles.centerAlign}
         minutes={minutes}
         isPaused={!isStarted}
+        onEnd={onEnd}
         onProgress={onProgress}
       />
       <View style={styles.wrapper}>

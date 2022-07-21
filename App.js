@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import Constants from "expo-constants";
 import { Focus } from "./src/features/focus/focus";
 import { Timer } from "./src/features/timer/timer";
@@ -11,17 +11,13 @@ export default function App() {
   return (
     <View style={styles.container}>
       {subject ? (
-        <>
-          <Timer subject={subject} textStyles={styles.text} />
-          <RoundedButton
-            size={50}
-            title="-"
-            textStyle={styles.button}
-            onPress={() => {
-              setSubject(null);
-            }}
-          />
-        </>
+        <Timer
+          subject={subject}
+          onTimerEnd={() => {
+            setSubject(null);
+          }}
+          textStyles={styles.text}
+        />
       ) : (
         <Focus addSubject={setSubject} />
       )}

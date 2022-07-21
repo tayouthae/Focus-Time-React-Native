@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { fontSizes, spacing } from "../utils/sizes";
-import { colors } from "../utils/colors";
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet } from 'react-native';
+import { fontSizes, spacing } from '../utils/sizes';
+import { colors } from '../utils/colors';
 
 const minutesToMilis = (min) => min * 1000 * 60;
 
@@ -11,6 +11,7 @@ export const CountDown = ({
   minutes = 0.1,
   isPaused,
   onProgress,
+  onEnd,
   style = {},
 }) => {
   const interval = React.useRef(null);
@@ -18,6 +19,8 @@ export const CountDown = ({
   const countdown = () => {
     setMillis((time) => {
       if (time === 0) {
+        clearInterval(interval.current);
+        onEnd();
         return time;
       }
       const timeLeft = time - 1000;
@@ -30,7 +33,7 @@ export const CountDown = ({
   useEffect(() => {
     setMillis(minutesToMilis(minutes));
   }, [minutes]);
-
+  
   useEffect(() => {
     if (isPaused) {
       if (interval.current) clearInterval(interval.current);
@@ -55,9 +58,9 @@ export const CountDown = ({
 const styles = StyleSheet.create({
   text: {
     fontSize: fontSizes.xxl,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors.white,
     padding: spacing.lg,
-    backgroundColor: "rgba(94,132,236,0.3)",
+    backgroundColor: 'rgba(94,132,236,0.3)',
   },
 });
