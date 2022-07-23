@@ -20,7 +20,6 @@ export const CountDown = ({
     setMillis((time) => {
       if (time === 0) {
         clearInterval(interval.current);
-        onEnd();
         return time;
       }
       const timeLeft = time - 1000;
@@ -35,6 +34,9 @@ export const CountDown = ({
 
   useEffect(() => {
     setMillis(minutesToMilis(minutes));
+    if (millis === 0) {
+      onEnd();
+    }
   }, [minutes]);
 
   useEffect(() => {
