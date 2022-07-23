@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Text, View, StyleSheet, AsyncStorage } from "react-native";
 import Constants from "expo-constants";
 import { Focus } from "./src/features/focus/focus";
 import { FocusHistory } from "./src/features/focus/FocusHistory";
@@ -23,6 +23,34 @@ export default function App() {
   const onClear = () => {
     setFocusHistory([]);
   };
+
+  const saveFocusHistory = async () => {
+    try {
+      await AsyncStorage.setItem("focusHistory", JSON.stringify(focusHistory));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const loadFocusHistory = async () => {
+    try {
+      const history = await AsyncStorage.getItem("focusHistory");
+
+      if (history && JSON.parse(history).lenght) {
+        setFocusHistory(JSON.parse(history));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    loadFocusHistory();
+  }, []);
+
+  useEffect(() => {
+    saveFocusHistory();
+  }, [focusHistory]);
 
   return (
     <View style={styles.container}>
