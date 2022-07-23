@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import Constants from 'expo-constants';
-import { Focus } from './src/features/focus/focus';
-import { FocusHistory } from './src/features/focus/FocusHistory';
-import { Timer } from './src/features/timer/timer';
-import { RoundedButton } from './src/components/RoundedButton';
-import { colors } from './src/utils/colors';
+import React, { useState } from "react";
+import { Text, View, StyleSheet } from "react-native";
+import Constants from "expo-constants";
+import { Focus } from "./src/features/focus/focus";
+import { FocusHistory } from "./src/features/focus/FocusHistory";
+import { Timer } from "./src/features/timer/timer";
+import { RoundedButton } from "./src/components/RoundedButton";
+import { colors } from "./src/utils/colors";
 
 const STATUSES = {
   COMPLETE: 1,
@@ -20,7 +20,10 @@ export default function App() {
     setFocusHistory([...focusHistory, { subject, status }]);
   };
 
-  const onClear = () => {};
+  const onClear = () => {
+    setFocusHistory([]);
+  };
+
   return (
     <View style={styles.container}>
       {subject ? (
@@ -54,7 +57,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.white,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   button: {
     size: 100,

@@ -1,19 +1,19 @@
 import React from "react";
 import { View, StyleSheet, FlatList, Text, SafeAreaView } from "react-native";
 
-import { fontSizes, spaces } from "../../utils/sizes";
+import { fontSizes, spacing } from "../../utils/sizes";
 import { colors } from "../../utils/colors";
 import { RoundedButton } from "../../components/RoundedButton";
 
 const HistoryItem = ({ item, index }) => {
-  return <Text style={styles.historyItem(item.status)}>{item.subject}</Text>;
+  return (
+    <Text style={item.status === 1 ? styles.green : styles.red}>
+      {item.subject}
+    </Text>
+  );
 };
 
 export const FocusHistory = ({ focusHistory, onClear }) => {
-  const clearHistory = () => {
-    onClear();
-  };
-
   return (
     <>
       <SafeAreaView style={{ flex: 0.5, alignItems: "center" }}>
@@ -26,6 +26,13 @@ export const FocusHistory = ({ focusHistory, onClear }) => {
               data={focusHistory}
               renderItem={HistoryItem}
             />
+            <View style={styles.clearContainer}>
+              <RoundedButton
+                size={75}
+                title="Clear"
+                onPress={() => onClear()}
+              />
+            </View>
           </>
         )}
       </SafeAreaView>
@@ -34,12 +41,20 @@ export const FocusHistory = ({ focusHistory, onClear }) => {
 };
 
 const styles = StyleSheet.create({
-  historyItem: (status) => ({
-    color: status > 1 ? "red" : "green",
+  red: {
+    color: colors.red,
     fontSize: fontSizes.md,
-  }),
+  },
+  green: {
+    color: colors.green,
+    fontSize: fontSizes.md,
+  },
   title: {
     color: colors.white,
     fontSize: fontSizes.lg,
+  },
+  clearContainer: {
+    alignItems: "center",
+    padding: spacing.md,
   },
 });
