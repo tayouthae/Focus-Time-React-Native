@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, AsyncStorage } from "react-native";
-import Constants from "expo-constants";
+import {
+  Text,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Platform,
+  StatusBar,
+  AsyncStorage,
+} from "react-native";
 import { Focus } from "./src/features/focus/focus";
 import { FocusHistory } from "./src/features/focus/FocusHistory";
 import { Timer } from "./src/features/timer/timer";
@@ -56,7 +63,7 @@ export default function App() {
   }, [focusHistory]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {subject ? (
         <Timer
           subject={subject}
@@ -76,22 +83,18 @@ export default function App() {
           <FocusHistory focusHistory={focusHistory} onClear={onClear} />
         </>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.black,
-    paddingTop: Constants.statusBarHeight,
+    backgroundColor: colors.darkBlue,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   text: {
     color: colors.white,
     fontWeight: "bold",
-  },
-  button: {
-    size: 100,
-    color: colors.white,
   },
 });

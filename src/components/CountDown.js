@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet } from "react-native";
+
 import { fontSizes, spacing } from "../utils/sizes";
 import { colors } from "../utils/colors";
 
-const minutesToMilis = (min) => min * 1000 * 60;
-
+const minutesToMillis = (min) => min * 1000 * 60;
 const formatTime = (time) => (time < 10 ? `0${time}` : time);
 
 export const CountDown = ({
@@ -16,45 +16,45 @@ export const CountDown = ({
 }) => {
   const interval = React.useRef(null);
 
-  const countdown = () => {
+  const [millis, setMillis] = useState(null);
+
+  const countDown = () => {
     setMillis((time) => {
       if (time === 0) {
         clearInterval(interval.current);
+        onEnd();
         return time;
       }
       const timeLeft = time - 1000;
-
       return timeLeft;
     });
   };
 
   useEffect(() => {
-    onProgress(millis / minutesToMilis(minutes));
-  }, [millis]);
+    setMillis(minutesToMillis(minutes));
+  }, [minutes]);
 
   useEffect(() => {
-    setMillis(minutesToMilis(minutes));
-    if (millis === 0) {
-      onEnd();
-    }
-  }, [minutes]);
+    onProgress(millis / minutesToMillis(minutes));
+  }, [millis]);
 
   useEffect(() => {
     if (isPaused) {
       if (interval.current) clearInterval(interval.current);
       return;
     }
-    interval.current = setInterval(countdown, 1000);
+
+    interval.current = setInterval(countDown, 1000);
+
+    return () => clearInterval(interval.current);
   }, [isPaused]);
 
-  const [millis, setMillis] = useState(minutesToMilis(minutes));
-
   const minute = Math.floor(millis / 1000 / 60) % 60;
-  const second = Math.floor(millis / 1000) % 60;
+  const seconds = Math.floor(millis / 1000) % 60;
   return (
     <View style={[style]}>
       <Text style={styles.text}>
-        {formatTime(minute)} : {formatTime(second)}
+        {formatTime(minute)}:{formatTime(seconds)}
       </Text>
     </View>
   );
@@ -62,10 +62,10 @@ export const CountDown = ({
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: fontSizes.xxl,
+    fontSize: fontSizes.xxxl,
     fontWeight: "bold",
     color: colors.white,
     padding: spacing.lg,
-    backgroundColor: "rgba(94,132,236,0.3)",
+    backgroundColor: "rgba(94, 132, 226, 0.3)",
   },
 });

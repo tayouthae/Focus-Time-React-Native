@@ -14,9 +14,8 @@ export const Focus = ({ addSubject }) => {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.textInput}
-            onSubmitEditing={({ nativeEvent }) => {
-              setTemp(nativeEvent.text);
-            }}
+            label="What would you like to focus on?"
+            onChangeText={setTemp}
           />
           <RoundedButton
             size={50}
